@@ -1,0 +1,12 @@
+#cnv {
+  height: 1000px;
+}
+:host ::ng-deep .startNode {
+  stroke: darkblue;
+}
+:host ::ng-deep .endNode {
+  stroke: darkblue;
+}
+:host ::ng-deep .btwNode {
+  stroke: darkblue;
+}
