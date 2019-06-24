@@ -1,5 +1,19 @@
+/*#container {
+  display: flex;
+  justify-content: space-around;
+  flex-direction: row wrap;
+}*/
 #cnv {
+  width: 900px;
+  height: 480px;
+}
+:host ::ng-deep svg {
+  position: inherit !important;
+}
+#gh {
   height: 1000px;
+  width: 15%;
+  float: left;
 }
 :host ::ng-deep .startNode {
   stroke: darkblue;

@@ -16,15 +16,15 @@ export class AppComponent implements AfterViewInit {
    
   constructor(private devicesService: DevicesService) { }
   ngAfterViewInit() {
-  //  var sourcePorts = this.devicesService.getSourcePorts();
-  //  var destinationPorts = this.devicesService.getDestinationPorts();
-  //  var maxPortsCount = Math.max(sourcePorts.length, destinationPorts.length);
-     const canvas = new draw2d.Canvas('cnv');
-    var rect = new draw2d.shape.node.Start();
-    canvas.add(rect);
+    var sourcePorts = this.devicesService.getSourcePorts();
+    var destinationPorts = this.devicesService.getDestinationPorts();
+    var maxPortsCount = Math.max(sourcePorts.length, destinationPorts.length);
+    const canvas = new draw2d.Canvas('cnv', 900, maxPortsCount * 40);
 
-  //  drawPorts(canvas, sourcePorts, PortType.Source);
-  //  drawPorts(canvas, destinationPorts, PortType.Destination);
+    canvas.setScrollArea($(window));
+
+    drawPorts(canvas, sourcePorts, PortType.Source);
+    drawPorts(canvas, destinationPorts, PortType.Destination);
   }
 }
 
@@ -83,7 +83,7 @@ class MyLabel extends draw2d.shape.basic.Label {
   private parentNode;
 
   constructor(startNode, text: String) {
-    super({ fontSize: 10, text: text, cssClass: "proba1", stroke: 0, padding: 0, minWidth: 80 });
+    super({ fontSize: 10, text: text, stroke: 0, padding: 0, minWidth: 80 });
     this.parentNode = startNode;
   }
 
@@ -100,10 +100,10 @@ class MyLabel extends draw2d.shape.basic.Label {
 };
 
 function drawPorts(canvas: draw2d.Canvas, ports, portType: PortType) {
-  let i = 1;
+  let i = 0;
   ports.forEach(function (value, index: number, array: Object[]) {
     paintNodeElement(value.name, canvas, portType, i);
-    i++
+    i++;
   });
 
   //var rect2 = new draw2d.shape.node.Between({ width: 20, height: 20, opacity: 1, bgColor: "red", cssClass: "btwNode" });
@@ -141,10 +141,10 @@ function createPortLabel(rect: MyStartNode, portName: string, canvas: any) {
 
 function GroupNodeParts(rect: MyStartNode, image: MyImage, text: MyLabel, canvas: any, portType: PortType, i: number) {
   var group = new draw2d.shape.composite.Group({ resizable: false, cssClass: "selectable" });
-  var x_coord = portType == PortType.Source ? 10 : 1000;
+  var x_coord = portType == PortType.Source ? 10 : 800;
   group.assignFigure(rect);
   group.assignFigure(image);
   group.assignFigure(text);
   group.setDraggable(false);
-  canvas.add(group, x_coord, 35 * i);
+  canvas.add(group, x_coord, 40 * i);
 }
