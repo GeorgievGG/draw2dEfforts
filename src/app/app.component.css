@@ -1,19 +1,19 @@
-/*#container {
+#container {
   display: flex;
   justify-content: space-around;
   flex-direction: row wrap;
-}*/
+}
 #cnv {
-  width: 900px;
+  width: 85%;
   height: 480px;
 }
-:host ::ng-deep svg {
+:host ::ng-deep #cnv > svg {
   position: inherit !important;
 }
 #gh {
   height: 1000px;
   width: 15%;
-  float: left;
+  background-color: aqua;
 }
 :host ::ng-deep .startNode {
   stroke: darkblue;

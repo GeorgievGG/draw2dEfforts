@@ -19,7 +19,7 @@ export class AppComponent implements AfterViewInit {
     var sourcePorts = this.devicesService.getSourcePorts();
     var destinationPorts = this.devicesService.getDestinationPorts();
     var maxPortsCount = Math.max(sourcePorts.length, destinationPorts.length);
-    const canvas = new draw2d.Canvas('cnv', 900, maxPortsCount * 40);
+    const canvas = new draw2d.Canvas('cnv', 1200, maxPortsCount * 40);
 
     canvas.setScrollArea($(window));
 
@@ -141,7 +141,7 @@ function createPortLabel(rect: MyStartNode, portName: string, canvas: any) {
 
 function GroupNodeParts(rect: MyStartNode, image: MyImage, text: MyLabel, canvas: any, portType: PortType, i: number) {
   var group = new draw2d.shape.composite.Group({ resizable: false, cssClass: "selectable" });
-  var x_coord = portType == PortType.Source ? 10 : 800;
+  var x_coord = portType == PortType.Source ? 10 : 1000;
   group.assignFigure(rect);
   group.assignFigure(image);
   group.assignFigure(text);
