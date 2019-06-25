@@ -4,7 +4,9 @@
 }
 :host ::ng-deep svg {
   position: relative !important;
-  width: 500px;
+  width: 800px;
+  background: url('../assets/grid_bg.png');
+  background-repeat: repeat;
 }
 :host ::ng-deep .startNode {
   stroke: darkblue;

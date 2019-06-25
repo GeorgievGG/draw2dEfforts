@@ -48,8 +48,8 @@ class ActiveStrategy implements BetweenNodeStrategy {
     if (node.getY() > 500) node.getCanvas().remove(node);
     else {
       setTimeout(() => {
-        node.setX(Math.round(node.getX() / 50) * 50);
-        node.setY(Math.round(node.getY() / 50) * 50);
+        node.setX(Math.round(node.getX() / 20) * 20);
+        node.setY(Math.round(node.getY() / 20) * 20);
       }, 1);
     }
   }
