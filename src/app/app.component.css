@@ -1,19 +1,32 @@
-#cnv {
-  height: 1000px;
-  text-align: center
+#container {
+  display: flex;
+  justify-content: space-around;
+  flex-direction: row wrap;
 }
-:host ::ng-deep svg {
-  position: relative !important;
+#cnv {
+  width: 85%;
+  height: 480px;
+}
+:host ::ng-deep #cnv > svg {
+  position: inherit !important;
   width: 800px;
   background: url('../assets/grid_bg.png');
   background-repeat: repeat;
 }
-:host ::ng-deep .startNode {
+#menu {
+  height: 1000px;
+  width: 15%;
+  background-color: aqua;
+}
+:host ::ng-deep .sourcePort {
   stroke: darkblue;
 }
-:host ::ng-deep .endNode {
+:host ::ng-deep .destinationPort {
   stroke: darkblue;
 }
 :host ::ng-deep .btwNode {
   stroke: darkblue;
+}
+:host ::ng-deep .freeArea {
+  fill: transparent;
 }

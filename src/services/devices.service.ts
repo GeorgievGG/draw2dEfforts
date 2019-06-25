@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { ElementType } from '../models/ElementType';
+import { Port } from '../models/Port';
 
 @Injectable({
   providedIn: 'root'
@@ -7,40 +9,22 @@ export class DevicesService {
 
   constructor() { }
 
-  getSourcePorts() {
-    var ports = [
-      { name: "Port 1" },
-      { name: "Port 2" },
-      { name: "Port 3" },
-      { name: "Port 4" },
-      { name: "Port 5" },
-      { name: "Port 6" },
-      { name: "Port 7" },
-      { name: "Port 8" },
-      { name: "Port 9" },
-      { name: "Port 10" },
-      { name: "Port 11" },
-      { name: "Port 12" }
-    ]
+  getSourcePorts(): Array<Port> {
+    var ports = new Array<Port>();
+    for (var i = 0; i < 12; i++) {
+      let elType = new ElementType("sourcePort", 10, 10);
+      ports[i] = new Port("Port " + i, elType);
+    };
 
     return ports;
   }
 
-  getDestinationPorts() {
-    var ports = [
-      { name: "Port 1" },
-      { name: "Port 2" },
-      { name: "Port 3" },
-      { name: "Port 4" },
-      { name: "Port 5" },
-      { name: "Port 6" },
-      { name: "Port 7" },
-      { name: "Port 8" },
-      { name: "Port 9" },
-      { name: "Port 10" },
-      { name: "Port 11" },
-      { name: "Port 12" }
-    ]
+  getDestinationPorts(): Array<Port> {
+    var ports = Array<Port>();
+    for (var i = 0; i < 12; i++) {
+      let elType = new ElementType("destinationPort", 1000, 10);
+      ports[i] = new Port("Port " + i, elType);
+    };
 
     return ports;
   }
