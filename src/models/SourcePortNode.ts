@@ -3,6 +3,7 @@ import draw2d from 'draw2d';
 export class SourcePortNode extends draw2d.shape.node.Start {
   constructor(width: number, height: number, cssClass: string) {
     super({ width: width, height: height, cssClass: cssClass, bgColor: "#FFFFFF", stroke: 0 });
+    super.resetPorts().createPort("output");
   }
 
   onMouseEnter() {
