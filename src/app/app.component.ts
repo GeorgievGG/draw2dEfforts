@@ -1,7 +1,8 @@
-import { AfterViewInit, Component } from '@angular/core';
+import { AfterViewInit, Component, RenderComponentType } from '@angular/core';
 import draw2d from 'draw2d';
 import { DevicesService } from '../services/devices.service';
 import { PortType } from '../models/PortType';
+import { BetweenNode } from './betweennode'
 
 
 @Component({
@@ -16,15 +17,30 @@ export class AppComponent implements AfterViewInit {
    
   constructor(private devicesService: DevicesService) { }
   ngAfterViewInit() {
-  //  var sourcePorts = this.devicesService.getSourcePorts();
-  //  var destinationPorts = this.devicesService.getDestinationPorts();
-  //  var maxPortsCount = Math.max(sourcePorts.length, destinationPorts.length);
-     const canvas = new draw2d.Canvas('cnv');
-    var rect = new draw2d.shape.node.Start();
+    var sourcePorts = this.devicesService.getSourcePorts();
+    var destinationPorts = this.devicesService.getDestinationPorts();
+    var maxPortsCount = Math.max(sourcePorts.length, destinationPorts.length);
+    const canvas = new draw2d.Canvas('cnv');
+    var rect = new BetweenNode({x: 100, y:500, bgColor:"#222222"});
     canvas.add(rect);
 
-  //  drawPorts(canvas, sourcePorts, PortType.Source);
-  //  drawPorts(canvas, destinationPorts, PortType.Destination);
+
+    canvas.getAbsoluteX = $.proxy(function() {
+      return this.html.children().position().left;
+    }, canvas);
+
+    canvas.getAbsoluteY = $.proxy(function() {
+      return this.html.children().position().top;
+    }, canvas);
+
+    canvas.fromDocumentToCanvasCoordinate = $.proxy(function(x, y) {
+      return new draw2d.geo.Point(
+              (x - this.getAbsoluteX() + this.getScrollLeft())*this.zoomFactor + window.scrollX,
+              (y - this.getAbsoluteY() + this.getScrollTop())*this.zoomFactor + window.scrollY);
+    },canvas);
+
+    drawPorts(canvas, sourcePorts, PortType.Source);
+    drawPorts(canvas, destinationPorts, PortType.Destination);
   }
 }
 
@@ -127,19 +143,19 @@ function createPortNode(canvas: any, portType: PortType) {
   return rect;
 }
 
-function createPortImage(rect: MyStartNode, canvas: any) {
+function createPortImage(rect: MyStartNode | MyEndNode, canvas: any) {
   var image = new MyImage(rect);
   canvas.add(image, 0, 0);
   return image;
 }
 
-function createPortLabel(rect: MyStartNode, portName: string, canvas: any) {
+function createPortLabel(rect: MyStartNode | MyEndNode, portName: string, canvas: any) {
   var text = new MyLabel(rect, portName);
   canvas.add(text, 25, 5);
   return text;
 }
 
-function GroupNodeParts(rect: MyStartNode, image: MyImage, text: MyLabel, canvas: any, portType: PortType, i: number) {
+function GroupNodeParts(rect: MyStartNode | MyEndNode, image: MyImage, text: MyLabel, canvas: any, portType: PortType, i: number) {
   var group = new draw2d.shape.composite.Group({ resizable: false, cssClass: "selectable" });
   var x_coord = portType == PortType.Source ? 10 : 1000;
   group.assignFigure(rect);
