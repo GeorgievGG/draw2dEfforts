@@ -10,17 +10,20 @@
 :host ::ng-deep #cnv > svg {
   position: inherit !important;
 }
-#gh {
+#menu {
   height: 1000px;
   width: 15%;
   background-color: aqua;
 }
-:host ::ng-deep .startNode {
+:host ::ng-deep .sourcePort {
   stroke: darkblue;
 }
-:host ::ng-deep .endNode {
+:host ::ng-deep .destinationPort {
   stroke: darkblue;
 }
 :host ::ng-deep .btwNode {
   stroke: darkblue;
+}
+:host ::ng-deep .freeArea {
+  fill: transparent;
 }
