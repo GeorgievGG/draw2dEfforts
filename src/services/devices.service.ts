@@ -12,7 +12,7 @@ export class DevicesService {
   getSourcePorts(): Array<Port> {
     var ports = new Array<Port>();
     for (var i = 0; i < 12; i++) {
-      let elType = new ElementType("sourcePort", 10, 10);
+      let elType = new ElementType("sourcePort", 20, 20);
       ports[i] = new Port("Port " + i, elType);
     };
 
@@ -22,7 +22,7 @@ export class DevicesService {
   getDestinationPorts(): Array<Port> {
     var ports = Array<Port>();
     for (var i = 0; i < 12; i++) {
-      let elType = new ElementType("destinationPort", 1000, 10);
+      let elType = new ElementType("destinationPort", 1000, 20);
       ports[i] = new Port("Port " + i, elType);
     };
 

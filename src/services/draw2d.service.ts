@@ -5,6 +5,7 @@ import { Port } from '../models/Port';
 import { PortImage } from '../models/PortImage';
 import { PortLabel } from '../models/PortLabel';
 import { SourcePortNode } from '../models/SourcePortNode';
+import { OperatorNode } from 'src/models/OperatorNode';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,7 @@ export class Draw2DService {
   constructor() { }
 
   drawCanvas(maxPortsCount: number) {
-    const canvas = new draw2d.Canvas('cnv', 1200, maxPortsCount * 40);
+    const canvas = new draw2d.Canvas('cnv', 1200, maxPortsCount * 40 + 200);
     canvas.setScrollArea($(window));
 
     return canvas;
@@ -25,11 +26,12 @@ export class Draw2DService {
       width: width,
       height: height,
       cssClass: "freeArea",
-      resizeable: false
+      resizeable: false,
+      bgColor: "#DDDDDD"
     });
-    rect.setDraggable(true);
+    rect.setDraggable(false);
     //let rect2 = new DestinationPortNode(105, 20);
-    canvas.add(rect, 156, 10);
+    canvas.add(rect, 160, 20);
     //canvas.add(rect2, 500, 10);
   };
 
@@ -41,10 +43,12 @@ export class Draw2DService {
 
   private drawPortElement(port: Port, canvas: draw2d.Canvas, index: number): void {
     let node = this.drawPortNode(port, canvas);
-    let image = this.drawPortImage(node, canvas);
-    let label = this.drawPortLabel(node, port.name, canvas);
-    let group = this.groupNodeParts(node, image, label);
-    this.drawPortGroup(port, index, canvas, group);
+    node.add(new PortImage(node), new draw2d.layout.locator.XYRelPortLocator(0, 0.5))
+        .add(new PortLabel(node, port.name), new draw2d.layout.locator.CenterLocator());
+
+    let nodeXCoord = port.type.initialXCoord;
+    let nodeYCoord = port.type.initialYCoord + 40 * index;
+    canvas.add(node, nodeXCoord, nodeYCoord);
   };
 
   private drawPortNode(port: Port, canvas: draw2d.Canvas): draw2d.shape.node.Node {
@@ -56,36 +60,10 @@ export class Draw2DService {
       node = new DestinationPortNode(port.width, port.height, port.type.name);
     }
 
-    canvas.add(node, 0, 0);
-
-    return node;
+    return node.setResizeable(false).setDraggable(false);
   };
 
-  private drawPortImage(node: draw2d.shape.node.Node, canvas: draw2d.Canvas): PortImage {
-    let image = new PortImage(node);
-    canvas.add(image, 5, 0);
-    return image;
-  };
-
-  private drawPortLabel(node: draw2d.shape.node.Node, portName: string, canvas: draw2d.Canvas): PortLabel {
-    let text = new PortLabel(node, portName);
-    canvas.add(text, 30, 5);
-    return text;
-  };
-
-  private groupNodeParts(node: draw2d.shape.node.Node, image: PortImage, text: PortLabel): draw2d.shape.composite.Group {
-    let group = new draw2d.shape.composite.Group({ resizable: false })
-    group.assignFigure(node);
-    group.assignFigure(image);
-    group.assignFigure(text);
-    group.setDraggable(false);
-
-    return group;
-  }
-
-  private drawPortGroup(port: Port, index: number, canvas: any, group: any) {
-    let nodeXCoord = port.type.initialXCoord;
-    let nodeYCoord = port.type.initialYCoord + 40 * index;
-    canvas.add(group, nodeXCoord, nodeYCoord);
+  drawDragAndDropMenu(canvas : draw2d.Canvas) {
+    canvas.add(new OperatorNode({}));
   }
 }
