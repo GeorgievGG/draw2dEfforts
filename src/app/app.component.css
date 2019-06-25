@@ -5,13 +5,11 @@
 }
 #cnv {
   width: 85%;
-  height: 480px;
+  height: 700px;
 }
 :host ::ng-deep #cnv > svg {
   position: inherit !important;
-  width: 800px;
-  background: url('../assets/grid_bg.png');
-  background-repeat: repeat;
+  width: 100%;
 }
 #menu {
   height: 1000px;
@@ -27,6 +25,10 @@
 :host ::ng-deep .btwNode {
   stroke: darkblue;
 }
+:host ::ng-deep .operatorNode {
+  stroke: darkblue;
+}
 :host ::ng-deep .freeArea {
-  fill: transparent;
+  opacity: 0.5 !important;
+  /* TODO fill: url('../assets/grid_bg.png'); */
 }

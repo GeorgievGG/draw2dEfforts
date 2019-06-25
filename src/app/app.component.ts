@@ -18,8 +18,9 @@ export class AppComponent implements AfterViewInit {
     var maxPortsCount = Math.max(sourcePorts.length, destinationPorts.length);
     const canvas = this.draw2DService.drawCanvas(maxPortsCount);
 
-    this.draw2DService.drawFreeCanvasArea(canvas, 800, maxPortsCount * 40 - 10);
+    this.draw2DService.drawFreeCanvasArea(canvas, 800, maxPortsCount * 40 - 20);
     this.draw2DService.drawPorts(canvas, sourcePorts);
     this.draw2DService.drawPorts(canvas, destinationPorts);
+    this.draw2DService.drawDragAndDropMenu(canvas);
   }
 }
