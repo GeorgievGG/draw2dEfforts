@@ -9,13 +9,11 @@ export class PortLabel extends draw2d.shape.basic.Label {
   }
 
   onMouseEnter() {
-    this.parentNode.setBackgroundColor("#AFEEEE");
-    this.parentNode.setStroke(1);
+    this.parentNode.onMouseEnter();
   }
 
   onMouseLeave() {
-    this.parentNode.setBackgroundColor("#FFFFFF");
-    this.parentNode.setStroke(0);
+    this.parentNode.onMouseLeave();
   }
 
 };
