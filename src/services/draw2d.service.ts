@@ -64,6 +64,6 @@ export class Draw2DService {
   };
 
   drawDragAndDropMenu(canvas : draw2d.Canvas) {
-    canvas.add(new OperatorNode({}));
+    canvas.add(new OperatorNode({}, "some operation", "somepath"));
   }
 }

@@ -1,15 +1,30 @@
 import draw2d from "draw2d"
 import { PortLabel } from './PortLabel';
+import { PortImage } from './PortImage';
 
 export class OperatorNode extends draw2d.shape.node.Between {
-  static idleColor : string = "#FFFFFF";
-  static activeColor : string = "#AFEEEE";
+  static readonly idleColor : string = "#FFFFFF";
+  static readonly activeColor : string = "#AFEEEE";
+
+  static readonly defaultAttribs : Object = {x: 200, y:500, width:100, height:40, bgColor: OperatorNode.idleColor, cssClass: "operatorNode"};
+
+  readonly label : string;
+  readonly imagePath : string;
+  readonly attribs : Object;
 
   strategy : OperatorNodeStrategy = new MenuStrategy;
 
-  constructor(attribs : any) {
-    super(Object.assign(attribs, {x: 200, y:500, width:100, height:40, bgColor: OperatorNode.idleColor, cssClass: "operatorNode"}));
-    super.add(new PortLabel(this, "Operation"), new draw2d.layout.locator.CenterLocator());
+  constructor(attribs : Object, labelText : string = "Operation", imagePath : string = null) {
+    super(Object.assign(attribs, OperatorNode.defaultAttribs));
+    this.label = labelText;
+    this.attribs = Object.assign(attribs, OperatorNode.defaultAttribs);
+    
+    super.add(new PortLabel(this, labelText), new draw2d.layout.locator.CenterLocator());
+
+    if (imagePath) {
+      this.imagePath = imagePath;
+      super.add(new PortImage(this), new draw2d.layout.locator.XYRelPortLocator(0.5, 0));
+    }
   }
 
   getCanvas() { return super.getCanvas(); }
@@ -37,6 +52,10 @@ export class OperatorNode extends draw2d.shape.node.Between {
     this.strategy.onDragEnd(this, x, y, shiftKey, ctrlKey);
     return result;
   }
+
+  clone() : OperatorNode {
+    return new OperatorNode(this.attribs, this.label, this.imagePath);
+  }
 }
 
 interface OperatorNodeStrategy {
@@ -60,7 +79,7 @@ class ActiveStrategy implements OperatorNodeStrategy {
 
 class MenuStrategy implements OperatorNodeStrategy {
   onDragStart(node : OperatorNode, x, y, shiftKey, ctrlKey) {
-    node.getCanvas().add(new OperatorNode({x: node.getX(), y: node.getY()}));
+    node.getCanvas().add(node.clone());
     node.strategy = new ActiveStrategy;
   }
 
