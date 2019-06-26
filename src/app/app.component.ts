@@ -21,6 +21,6 @@ export class AppComponent implements AfterViewInit {
     this.draw2DService.drawFreeCanvasArea(canvas, 800, maxPortsCount * 40 - 20);
     this.draw2DService.drawPorts(canvas, sourcePorts);
     this.draw2DService.drawPorts(canvas, destinationPorts);
-    this.draw2DService.drawDragAndDropMenu(canvas);
+    this.draw2DService.drawDragAndDropMenu(canvas, 800, 200);
   }
 }

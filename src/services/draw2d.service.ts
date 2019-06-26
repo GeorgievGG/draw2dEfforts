@@ -6,6 +6,7 @@ import { PortImage } from '../models/PortImage';
 import { PortLabel } from '../models/PortLabel';
 import { SourcePortNode } from '../models/SourcePortNode';
 import { OperatorNode } from 'src/models/OperatorNode';
+import { NodeContainer } from 'src/models/NodeContainer';
 
 @Injectable({
   providedIn: 'root'
@@ -63,7 +64,12 @@ export class Draw2DService {
     return node.setResizeable(false).setDraggable(false);
   };
 
-  drawDragAndDropMenu(canvas : draw2d.Canvas) {
-    canvas.add(new OperatorNode({}, "some operation", "somepath"));
+  drawDragAndDropMenu(canvas: draw2d.Canvas, width: number, height: number) {
+    let dragAndDropMenu = new NodeContainer(160, 500, width, height, 0, 20, 20);
+
+    for (let i = 0; i < 15; i++)
+      dragAndDropMenu.add(new OperatorNode({}, "some operation", "somepath"));
+
+    dragAndDropMenu.addToCanvas(canvas);
   }
 }
