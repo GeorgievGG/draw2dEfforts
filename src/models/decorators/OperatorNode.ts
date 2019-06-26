@@ -38,6 +38,7 @@ export class OperatorNode extends draw2d.shape.node.Between {
   getY() { return super.getY(); }
   setX(x : number) : void { super.setX(x); }
   setY(y : number) : void { super.setY(y); }
+  getComposite() { return super.getComposite(); }
 
   onMouseEnter() : void {
     super.setBackgroundColor(OperatorNode.ACTIVE_COLOR_LBLUE);
