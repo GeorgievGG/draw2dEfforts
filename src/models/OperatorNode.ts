@@ -6,18 +6,18 @@ export class OperatorNode extends draw2d.shape.node.Between {
   static readonly idleColor : string = "#FFFFFF";
   static readonly activeColor : string = "#AFEEEE";
 
-  static readonly defaultAttribs : Object = {x: 200, y:500, width:100, height:40, bgColor: OperatorNode.idleColor, cssClass: "operatorNode"};
+  static readonly defaultAttribs : Object = {width:100, height:40, bgColor: OperatorNode.idleColor, cssClass: "operatorNode"};
 
   readonly label : string;
   readonly imagePath : string;
-  readonly attribs : Object;
 
   strategy : OperatorNodeStrategy = new MenuStrategy;
 
   constructor(attribs : Object, labelText : string = "Operation", imagePath : string = null) {
     super(Object.assign(attribs, OperatorNode.defaultAttribs));
+    super.setResizeable(false).setSelectable(false);
+
     this.label = labelText;
-    this.attribs = Object.assign(attribs, OperatorNode.defaultAttribs);
     
     super.add(new PortLabel(this, labelText), new draw2d.layout.locator.CenterLocator());
 
@@ -54,7 +54,7 @@ export class OperatorNode extends draw2d.shape.node.Between {
   }
 
   clone() : OperatorNode {
-    return new OperatorNode(this.attribs, this.label, this.imagePath);
+    return new OperatorNode({x: super.getX(), y: super.getY()}, this.label, this.imagePath);
   }
 }
 
