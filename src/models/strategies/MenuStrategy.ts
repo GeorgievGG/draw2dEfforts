@@ -4,7 +4,7 @@ import { ActiveStrategy } from './ActiveStrategy';
 
 export class MenuStrategy implements OperatorNodeStrategy {
   onDragStart(node: OperatorNode, x, y, shiftKey, ctrlKey) {
-    let newNode = new OperatorNode({ x: node.getX(), y: node.getY() });
+    let newNode = node.clone();
     node.getCanvas().add(newNode);
     node.strategy = new ActiveStrategy;
   }
