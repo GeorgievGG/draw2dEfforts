@@ -1,5 +1,5 @@
 import draw2d from 'draw2d';
-import { Port } from './Port';
+import { Port } from '../Port';
 
 export class SourcePortNode extends draw2d.shape.node.Start {
   private static readonly ACTIVE_COLOR_LBLUE: string = "#AFEEEE";
