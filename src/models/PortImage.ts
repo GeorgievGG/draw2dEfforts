@@ -1,10 +1,10 @@
 import draw2d from 'draw2d';
 
 export class PortImage extends draw2d.shape.basic.Image {
-  private parentNode;
+  private parentNode: draw2d.Figure;
 
-  constructor(startNode, imagePath : string = "/assets/start.png") {
-    super({ width: 20, height: 20, path: imagePath });
+  constructor(startNode: draw2d.Figure, imagePath: string = "/assets/start.png") {
+    super({ width: startNode.getHeight(), height: startNode.getHeight(), path: imagePath });
     this.parentNode = startNode;
   }
 
