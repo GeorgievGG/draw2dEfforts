@@ -1,4 +1,5 @@
-import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import draw2d from 'draw2d';
 import { Port } from '../models/Port';
 import { DevicesService } from '../services/devices.service';
@@ -10,16 +11,28 @@ import { Draw2DService } from '../services/draw2d.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements AfterViewInit {
+export class AppComponent implements AfterViewInit, OnInit {
   private canvas: draw2d.Canvas;
-  @ViewChild('sourcePortSearch', null) sourcePortSearch: ElementRef;
-  @ViewChild('destPortSearch', null) destPortSearch: ElementRef;
+  public sourcePortSearch: FormControl;
+  public destPortSearch: FormControl;
 
   private readonly SOURCE_PORT_CSS_CLASS: string = "sourcePort";
   private readonly DESTINATION_PORT_CSS_CLASS: string = "destinationPort";
   private readonly MINIMUM_VIABLE_SEARCH_LENGTH: number = 5;
 
   constructor(private devicesService: DevicesService, private draw2DService: Draw2DService) { }
+
+  ngOnInit() {
+    this.sourcePortSearch = new FormControl();
+    this.destPortSearch = new FormControl();
+    this.sourcePortSearch.valueChanges.subscribe(newSearchTerm => {
+      this.tryFilter(newSearchTerm, this.destPortSearch.value);
+    });
+    this.destPortSearch.valueChanges.subscribe(newSearchTerm => {
+      this.tryFilter(this.sourcePortSearch.value, newSearchTerm);
+    });
+  }
+
   ngAfterViewInit() {
     var sourcePorts: Port[] = this.devicesService.getSourcePorts();
     var destinationPorts: Port[] = this.devicesService.getDestinationPorts();
@@ -32,15 +45,16 @@ export class AppComponent implements AfterViewInit {
     this.draw2DService.drawDragAndDropMenu(this.canvas);
   }
 
-  tryFilter() {
-    let sourceSearchTerm = this.sourcePortSearch.nativeElement.value;
-    let destSearchTerm = this.destPortSearch.nativeElement.value;
-    const isTermLongEnough = sourceSearchTerm.length >= this.MINIMUM_VIABLE_SEARCH_LENGTH || destSearchTerm.length >= this.MINIMUM_VIABLE_SEARCH_LENGTH;
-    const termsAreEmpty = sourceSearchTerm == "" && destSearchTerm.length == "";
-    if (isTermLongEnough || termsAreEmpty) {
-      this.executeSearch(sourceSearchTerm, destSearchTerm);
+  tryFilter(sourcePortSearchTerm: string, destPortSearchTerm: string) {
+    const termsAreEmpty = sourcePortSearchTerm && destPortSearchTerm;
+    if (termsAreEmpty || this.areTermsLongEnough) {
+      this.executeSearch(sourcePortSearchTerm, destPortSearchTerm);
     }
   };
+
+  private areTermsLongEnough(sourcePortSearchTerm: string, destPortSearchTerm: string): boolean {
+    return sourcePortSearchTerm.length >= this.MINIMUM_VIABLE_SEARCH_LENGTH || destPortSearchTerm.length >= this.MINIMUM_VIABLE_SEARCH_LENGTH;
+  }
 
   private executeSearch(sourceSearchTerm: string, destSearchTerm: string) {
     let sourceFigure = this.draw2DService.getFigure(this.canvas, this.SOURCE_PORT_CSS_CLASS, sourceSearchTerm);
