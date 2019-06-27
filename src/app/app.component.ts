@@ -26,10 +26,12 @@ export class AppComponent implements AfterViewInit, OnInit {
     this.sourcePortSearch = new FormControl();
     this.destPortSearch = new FormControl();
     this.sourcePortSearch.valueChanges.subscribe(newSearchTerm => {
-      this.tryFilter(newSearchTerm, this.destPortSearch.value);
+      let destSearchTerm = this.ensureStringIsNotNull(this.destPortSearch.value);
+      this.tryFilter(newSearchTerm, destSearchTerm);
     });
     this.destPortSearch.valueChanges.subscribe(newSearchTerm => {
-      this.tryFilter(this.sourcePortSearch.value, newSearchTerm);
+      let sourceSearchTerm = this.ensureStringIsNotNull(this.sourcePortSearch.value);
+      this.tryFilter(sourceSearchTerm, newSearchTerm);
     });
   }
 
@@ -46,22 +48,12 @@ export class AppComponent implements AfterViewInit, OnInit {
   }
 
   tryFilter(sourcePortSearchTerm: string, destPortSearchTerm: string) {
-    if ((sourcePortSearchTerm && destPortSearchTerm) || (sourcePortSearchTerm.length >= this.MINIMUM_VIABLE_SEARCH_LENGTH || destPortSearchTerm.length >= this.MINIMUM_VIABLE_SEARCH_LENGTH)) {
+    const areTermsEmpty = sourcePortSearchTerm == "" && destPortSearchTerm == "";
+    const areTermsLongEnough = sourcePortSearchTerm.length >= this.MINIMUM_VIABLE_SEARCH_LENGTH || destPortSearchTerm.length >= this.MINIMUM_VIABLE_SEARCH_LENGTH;
+    if (areTermsEmpty || areTermsLongEnough) {
       this.executeSearch(sourcePortSearchTerm, destPortSearchTerm);
     }
   };
-
-  private areTermsEmoty(sourcePortSearchTerm: string, destPortSearchTerm: string): boolean {
-    if (sourcePortSearchTerm && destPortSearchTerm) {
-      return false;
-    }
-
-    return true;
-  }
-
-  private areTermsLongEnough(sourcePortSearchTerm: string, destPortSearchTerm: string): boolean {
-    return sourcePortSearchTerm.length >= this.MINIMUM_VIABLE_SEARCH_LENGTH || destPortSearchTerm.length >= this.MINIMUM_VIABLE_SEARCH_LENGTH;
-  }
 
   private executeSearch(sourceSearchTerm: string, destSearchTerm: string) {
     let sourceFigure = this.draw2DService.getFigure(this.canvas, this.SOURCE_PORT_CSS_CLASS, sourceSearchTerm);
@@ -78,5 +70,13 @@ export class AppComponent implements AfterViewInit, OnInit {
     else {
       this.draw2DService.showAllElements(this.canvas);
     }
+  }
+
+  private ensureStringIsNotNull(value: string): string {
+    if (value == null) {
+      return "";
+    }
+
+    return value;
   }
 }
