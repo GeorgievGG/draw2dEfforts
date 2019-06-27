@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" ng-app="">
 <head>
   <meta charset="UTF-8">
@@ -10,8 +10,8 @@
     </div>
     <div class="appConfigContainer">
       <div class="searchContainer">
-        <input #sourcePortSearch type="text" placeholder="Search..." (keyup)="tryFilter()" class="searchBox sourceSearch">
-        <input #destPortSearch type="text" placeholder="Search..." (keyup)="tryFilter()" class="searchBox destSearch">
+        <input type="text" placeholder="Search..." class="searchBox sourceSearch" [formControl]="sourcePortSearch">
+        <input type="text" placeholder="Search..." class="searchBox destSearch" [formControl]="destPortSearch">
       </div>
       <div id="cnv">
       </div>
