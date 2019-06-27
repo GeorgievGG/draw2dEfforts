@@ -27,7 +27,7 @@ export class Draw2DService {
     let jailHouse = new draw2d.shape.composite.Jailhouse({
       width: width,
       height: height,
-      cssClass: "jailhouse",
+      cssClass: "jailhouse persists-filter",
       resizeable: false,
       bgColor: "#DDDDDD"
     });
@@ -166,24 +166,25 @@ export class Draw2DService {
   }
 
   private attachApplicableElements(index: number, value: draw2d.Figure, result: draw2d.util.ArrayList): draw2d.util.ArrayList {
-    const shouldBeFiltered = value.cssClass != 'jailhouse' && value.cssClass != 'operatorNode';
-    if (shouldBeFiltered) {
-      result.add(value);
+    if (value.cssClass.includes("persists-filter")) {
+      return;
+    }
 
-      let subFigures = value.getChildren();
-      subFigures.each((i, value) => this.attachApplicableElements(i, value, result));
-      if (value.getConnections) {
-        let connections = value.getConnections();
-        connections.each((i, value) => this.attachApplicableElements(i, value, result));
-      };
-      if (value.getOutputPorts) {
-        let outputPorts = value.getOutputPorts();
-        outputPorts.each((i, value) => this.attachApplicableElements(i, value, result));
-      }
-      if (value.getInputPorts) {
-        let inputPorts = value.getInputPorts();
-        inputPorts.each((i, value) => this.attachApplicableElements(i, value, result));
-      }
+    result.add(value);
+
+    let subFigures = value.getChildren();
+    subFigures.each((i, value) => this.attachApplicableElements(i, value, result));
+    if (value.getConnections) {
+      let connections = value.getConnections();
+      connections.each((i, value) => this.attachApplicableElements(i, value, result));
+    };
+    if (value.getOutputPorts) {
+      let outputPorts = value.getOutputPorts();
+      outputPorts.each((i, value) => this.attachApplicableElements(i, value, result));
+    }
+    if (value.getInputPorts) {
+      let inputPorts = value.getInputPorts();
+      inputPorts.each((i, value) => this.attachApplicableElements(i, value, result));
     }
   }
 
