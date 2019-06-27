@@ -13,7 +13,7 @@ export class OperatorNode extends draw2d.shape.node.Between {
   private readonly label: string;
   private readonly imagePath: string;
 
-  strategy : OperatorNodeStrategy = new MenuStrategy;
+  strategy : OperatorNodeStrategy = new MenuStrategy(this);
 
   constructor(attribs: Object, labelText: string = "Operation", imagePath: string = null) {
     super(Object.assign(attribs, OperatorNode.DEFAULT_ATTRIBS));
@@ -39,6 +39,12 @@ export class OperatorNode extends draw2d.shape.node.Between {
   setX(x : number) : void { super.setX(x); }
   setY(y : number) : void { super.setY(y); }
   getComposite() { return super.getComposite(); }
+  resetPorts() { super.resetPorts(); }
+  defaultPorts() { 
+    super.resetPorts();
+    super.createPort("input");
+    super.createPort("output"); 
+  }
 
   onMouseEnter() : void {
     super.setBackgroundColor(OperatorNode.ACTIVE_COLOR_LBLUE);
@@ -50,13 +56,13 @@ export class OperatorNode extends draw2d.shape.node.Between {
 
   onDragStart(x, y, shiftKey, ctrlKey) {
     let result = super.onDragStart(x, y, shiftKey, ctrlKey);
-    this.strategy.onDragStart(this, x, y, shiftKey, ctrlKey);
+    this.strategy.onDragStart(x, y, shiftKey, ctrlKey);
     return result;
   }
 
   onDragEnd(x, y, shiftKey, ctrlKey) {
     let result = super.onDragEnd(x, y, shiftKey, ctrlKey);
-    this.strategy.onDragEnd(this, x, y, shiftKey, ctrlKey);
+    this.strategy.onDragEnd(x, y, shiftKey, ctrlKey);
     return result;
   }
 

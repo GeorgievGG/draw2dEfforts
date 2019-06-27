@@ -3,11 +3,15 @@ import { OperatorNode } from '../decorators/OperatorNode';
 import { ActiveStrategy } from './ActiveStrategy';
 
 export class MenuStrategy implements OperatorNodeStrategy {
-  onDragStart(node: OperatorNode, x, y, shiftKey, ctrlKey) {
-    let newNode = node.clone();
-    node.getCanvas().add(newNode);
-    node.strategy = new ActiveStrategy;
+  constructor(private readonly node: OperatorNode) {
+    node.resetPorts();
   }
 
-  onDragEnd(node: OperatorNode, x, y, shiftKey, ctrlKey) { }
+  onDragStart(x, y, shiftKey, ctrlKey) {
+    let newNode = this.node.clone();
+    this.node.getCanvas().add(newNode);
+    this.node.strategy = new ActiveStrategy(this.node);
+  }
+
+  onDragEnd(x, y, shiftKey, ctrlKey) { }
 }

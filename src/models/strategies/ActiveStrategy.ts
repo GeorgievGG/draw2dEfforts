@@ -2,23 +2,27 @@ import { OperatorNodeStrategy } from '../../contracts/OperatorNodeStrategy';
 import { OperatorNode } from '../decorators/OperatorNode';
 
 export class ActiveStrategy implements OperatorNodeStrategy {
-  onDragStart(node: OperatorNode, x, y, shiftKey, ctrlKey) { }
+  constructor(private readonly node: OperatorNode) {
+    node.defaultPorts();
+  }
 
-  onDragEnd(node: OperatorNode, x, y, shiftKey, ctrlKey) {
+  onDragStart(x, y, shiftKey, ctrlKey) { }
+
+  onDragEnd(x, y, shiftKey, ctrlKey) {
     setTimeout(() => {
-      if (node.getComposite() == null || !node.getComposite().hitTest(x, y)) 
-        this.removeNode(node);
+      if (this.node.getComposite() == null || !this.node.getComposite().hitTest(x, y)) 
+        this.removeNode();
       else
-        this.alignToGrid(node);
+        this.alignToGrid();
     }, 1);
   }
 
-  private removeNode(node: OperatorNode) {
-    node.getCanvas().remove(node);
+  private removeNode() {
+    this.node.getCanvas().remove(this.node);
   }
 
-  private alignToGrid(node: OperatorNode) {
-      node.setX(Math.round(node.getX() / 20) * 20);
-      node.setY(Math.round(node.getY() / 20) * 20);
+  private alignToGrid() {
+      this.node.setX(Math.round(this.node.getX() / 20) * 20);
+      this.node.setY(Math.round(this.node.getY() / 20) * 20);
   }
 }
