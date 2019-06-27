@@ -34,6 +34,21 @@ export class Draw2DService {
     jailHouse.setDraggable(false);
     jailHouse.setBoundingBox = function () { };
     canvas.add(jailHouse, 160, 20);
+
+    // This allows mouse drag-selections to start from inside the jailhouse.
+    let _oldGetBestFigure = canvas.getBestFigure.bind(canvas);
+    canvas.getBestFigure = function(x, y, blacklist?, whitelist?) {
+      if (!$.isArray(blacklist))
+        if (blacklist) blacklist = [blacklist];
+        else blacklist = [];
+
+      if(!$.isArray(whitelist))
+        if (whitelist) whitelist = [whitelist];
+        else whitelist = [];
+
+      blacklist.push(jailHouse);
+      return _oldGetBestFigure(x, y, blacklist, whitelist);
+    };
   };
 
   drawPorts(canvas: draw2d.Canvas, ports: Port[]) {
