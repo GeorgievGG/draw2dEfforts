@@ -5,6 +5,7 @@ import { ActiveStrategy } from './ActiveStrategy';
 export class MenuStrategy implements OperatorNodeStrategy {
   constructor(private readonly node: OperatorNode) {
     node.resetPorts();
+    node.addCssClass('persists-filter');
   }
 
   onDragStart(x, y, shiftKey, ctrlKey) {

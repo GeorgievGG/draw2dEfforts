@@ -48,6 +48,8 @@ export class OperatorNode extends draw2d.shape.node.Between {
     super.createPort("input");
     super.createPort("output"); 
   }
+  addCssClass(cssClass: string) { return super.addCssClass(cssClass); }
+  removeCssClass(cssClass: string) { return super.removeCssClass(cssClass); }
 
   onMouseEnter() : void {
     super.setBackgroundColor(OperatorNode.ACTIVE_COLOR_LBLUE);

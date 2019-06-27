@@ -5,6 +5,7 @@ import draw2d from "draw2d";
 export class ActiveStrategy implements OperatorNodeStrategy {
   constructor(private readonly node: OperatorNode) {
     node.defaultPorts();
+    node.removeCssClass('persists-filter');
   }
 
   onDragStart(x, y, shiftKey, ctrlKey) { }
