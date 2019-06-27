@@ -42,24 +42,27 @@ export class AppComponent implements AfterViewInit, OnInit {
     this.draw2DService.drawJailhouseElement(this.canvas, 800, maxPortsCount * 40 - 20);
     this.draw2DService.drawPorts(this.canvas, sourcePorts);
     this.draw2DService.drawPorts(this.canvas, destinationPorts);
-    this.draw2DService.drawDragAndDropMenu(this.canvas);
+    this.draw2DService.drawDragAndDropMenu(this.canvas, 800, 200);
   }
 
   tryFilter(sourcePortSearchTerm: string, destPortSearchTerm: string) {
-    const termsAreEmpty = sourcePortSearchTerm && destPortSearchTerm;
-    if (termsAreEmpty || this.areTermsLongEnough) {
+    if ((sourcePortSearchTerm && destPortSearchTerm) || (sourcePortSearchTerm.length >= this.MINIMUM_VIABLE_SEARCH_LENGTH || destPortSearchTerm.length >= this.MINIMUM_VIABLE_SEARCH_LENGTH)) {
       this.executeSearch(sourcePortSearchTerm, destPortSearchTerm);
     }
   };
+
+  private areTermsEmoty(sourcePortSearchTerm: string, destPortSearchTerm: string): boolean {
+    if (sourcePortSearchTerm && destPortSearchTerm) {
+      return false;
+    }
+
+    return true;
+  }
 
   private areTermsLongEnough(sourcePortSearchTerm: string, destPortSearchTerm: string): boolean {
     return sourcePortSearchTerm.length >= this.MINIMUM_VIABLE_SEARCH_LENGTH || destPortSearchTerm.length >= this.MINIMUM_VIABLE_SEARCH_LENGTH;
   }
 
-    this.draw2DService.drawJailhouseElement(canvas, 800, maxPortsCount * 40 - 20);
-    this.draw2DService.drawPorts(canvas, sourcePorts);
-    this.draw2DService.drawPorts(canvas, destinationPorts);
-    this.draw2DService.drawDragAndDropMenu(canvas, 800, 200);
   private executeSearch(sourceSearchTerm: string, destSearchTerm: string) {
     let sourceFigure = this.draw2DService.getFigure(this.canvas, this.SOURCE_PORT_CSS_CLASS, sourceSearchTerm);
     let destFigure = this.draw2DService.getFigure(this.canvas, this.DESTINATION_PORT_CSS_CLASS, destSearchTerm);

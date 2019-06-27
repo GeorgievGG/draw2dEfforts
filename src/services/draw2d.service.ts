@@ -32,7 +32,7 @@ export class Draw2DService {
       bgColor: "#DDDDDD"
     });
     jailHouse.setDraggable(false);
-    jailHouse.setBoundingBox = function() {};
+    jailHouse.setBoundingBox = function () { };
     canvas.add(jailHouse, 160, 20);
   };
 
@@ -63,8 +63,13 @@ export class Draw2DService {
     return allElements;
   }
 
-  drawDragAndDropMenu(canvas: draw2d.Canvas): void {
-    canvas.add(new OperatorNode({}));
+  drawDragAndDropMenu(canvas: draw2d.Canvas, width: number, height: number) {
+    let dragAndDropMenu = new NodeContainer(160, 500, width, height, 0, 20, 20);
+
+    for (let i = 0; i < 15; i++)
+      dragAndDropMenu.add(new OperatorNode({}, "some operation", "somepath"));
+
+    dragAndDropMenu.addToCanvas(canvas);
   }
 
   private drawPortElement(port: Port, canvas: draw2d.Canvas, index: number): void {
@@ -172,12 +177,5 @@ export class Draw2DService {
 
     let subFigures = value.getChildren();
     subFigures.each((i, value) => this.applyFigureConfig(i, value, attributeConfig));
-  drawDragAndDropMenu(canvas: draw2d.Canvas, width: number, height: number) {
-    let dragAndDropMenu = new NodeContainer(160, 500, width, height, 0, 20, 20);
-
-    for (let i = 0; i < 15; i++)
-      dragAndDropMenu.add(new OperatorNode({}, "some operation", "somepath"));
-
-    dragAndDropMenu.addToCanvas(canvas);
   }
 }
