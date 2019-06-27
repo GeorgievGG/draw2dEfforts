@@ -24,7 +24,6 @@ export class Draw2DService {
 
   drawJailhouseElement(canvas: draw2d.Canvas, width: number, height: number) {
     let jailHouse = new draw2d.shape.composite.Jailhouse({
-      id: "jailhouse",
       width: width,
       height: height,
       cssClass: "jailhouse",
@@ -47,20 +46,23 @@ export class Draw2DService {
 
   filter(figure: draw2d.Figure, canvas: draw2d.Canvas, initialNodeType: string): void {
     let chosenFigures = this.getFiguresChain(figure, initialNodeType);
-    chosenFigures.add(canvas.getFigure("jailhouse"));
-    this.setAttributesToFigures(chosenFigures, { opacity: 1 });
+    this.setAttributesToFigures(chosenFigures, { visible: true });
   };
 
   hideAllElements(canvas: any) {
     let allElements = this.getAllElements(canvas);
-    this.setAttributesToFigures(allElements, { opacity: 0 });
+    this.setAttributesToFigures(allElements, { visible: false });
     return allElements;
   }
 
   showAllElements(canvas: any) {
     let allElements = this.getAllElements(canvas);
-    this.setAttributesToFigures(allElements, { opacity: 1 });
+    this.setAttributesToFigures(allElements, { visible: true });
     return allElements;
+  }
+
+  drawDragAndDropMenu(canvas: draw2d.Canvas): void {
+    canvas.add(new OperatorNode({}));
   }
 
   private drawPortElement(port: Port, canvas: draw2d.Canvas, index: number): void {
@@ -89,14 +91,10 @@ export class Draw2DService {
     return node.setResizeable(false).setDraggable(false);
   };
 
-  drawDragAndDropMenu(canvas: draw2d.Canvas): void {
-    canvas.add(new OperatorNode({}));
-  }
-
   private getAllElements(canvas: draw2d.Canvas): draw2d.util.ArrayList {
     let allFigures = canvas.getFigures();
     let allElements = new draw2d.util.ArrayList();
-    allFigures.each((i, value) => this.attachSubElements(i, value, allElements));
+    allFigures.each((i, value) => this.attachApplicableElements(i, value, allElements));
     this.setAttributesToFigures(allElements, { opacity: 1 });
 
     return allElements;
@@ -145,21 +143,25 @@ export class Draw2DService {
     figures.each((i, value) => this.applyFigureConfig(i, value, attributeConfig));
   }
 
-  private attachSubElements(index: number, value: draw2d.Figure, result: draw2d.util.ArrayList): draw2d.util.ArrayList {
-    result.add(value);
-    let subFigures = value.getChildren();
-    subFigures.each((i, value) => this.attachSubElements(i, value, result));
-    if (value.getConnections) {
-      let connections = value.getConnections();
-      connections.each((i, value) => this.attachSubElements(i, value, result));
-    };
-    if (value.getOutputPorts) {
-      let outputPorts = value.getOutputPorts();
-      outputPorts.each((i, value) => this.attachSubElements(i, value, result));
-    }
-    if (value.getInputPorts) {
-      let inputPorts = value.getInputPorts();
-      inputPorts.each((i, value) => this.attachSubElements(i, value, result));
+  private attachApplicableElements(index: number, value: draw2d.Figure, result: draw2d.util.ArrayList): draw2d.util.ArrayList {
+    const shouldBeFiltered = value.cssClass != 'jailhouse' && value.cssClass != 'operatorNode';
+    if (shouldBeFiltered) {
+      result.add(value);
+
+      let subFigures = value.getChildren();
+      subFigures.each((i, value) => this.attachApplicableElements(i, value, result));
+      if (value.getConnections) {
+        let connections = value.getConnections();
+        connections.each((i, value) => this.attachApplicableElements(i, value, result));
+      };
+      if (value.getOutputPorts) {
+        let outputPorts = value.getOutputPorts();
+        outputPorts.each((i, value) => this.attachApplicableElements(i, value, result));
+      }
+      if (value.getInputPorts) {
+        let inputPorts = value.getInputPorts();
+        inputPorts.each((i, value) => this.attachApplicableElements(i, value, result));
+      }
     }
   }
 
