@@ -42,6 +42,31 @@ export class Draw2DService {
     }.bind(this));
   };
 
+  getFigure(canvas: any, initialNodeType: string, portName: string) {
+    return canvas.getFigure(initialNodeType + "_" + portName);
+  };
+
+  filter(figure: draw2d.Figure, canvas: draw2d.Canvas, initialNodeType: string): void {
+    let chosenFigures = this.getFiguresChain(figure, initialNodeType);
+    this.setAttributesToFigures(chosenFigures, { visible: true });
+  };
+
+  hideAllElements(canvas: any) {
+    let allElements = this.getAllElements(canvas);
+    this.setAttributesToFigures(allElements, { visible: false });
+    return allElements;
+  }
+
+  showAllElements(canvas: any) {
+    let allElements = this.getAllElements(canvas);
+    this.setAttributesToFigures(allElements, { visible: true });
+    return allElements;
+  }
+
+  drawDragAndDropMenu(canvas: draw2d.Canvas): void {
+    canvas.add(new OperatorNode({}));
+  }
+
   private drawPortElement(port: Port, canvas: draw2d.Canvas, index: number): void {
     let node = this.drawPortNode(port, canvas);
     let image = new PortImage(node);
@@ -68,6 +93,85 @@ export class Draw2DService {
     return node.setResizeable(false).setDraggable(false);
   };
 
+  private getAllElements(canvas: draw2d.Canvas): draw2d.util.ArrayList {
+    let allFigures = canvas.getFigures();
+    let allElements = new draw2d.util.ArrayList();
+    allFigures.each((i, value) => this.attachApplicableElements(i, value, allElements));
+    this.setAttributesToFigures(allElements, { opacity: 1 });
+
+    return allElements;
+  };
+
+  private getFiguresChain(figure: draw2d.Figure, initialNodeType: string): draw2d.util.ArrayList {
+    let chosenFigures = new draw2d.util.ArrayList();
+    chosenFigures.add(figure);
+    this.addPorts(figure, initialNodeType, chosenFigures);
+    return chosenFigures;
+  }
+
+  private addPorts(figure: draw2d.Figure, initialNodeType: string, chosenFigures: draw2d.util.ArrayList): void {
+    if (initialNodeType == "sourcePort") {
+      let outputPorts = figure.getOutputPorts();
+      chosenFigures.addAll(outputPorts);
+      outputPorts.each((i, value) => this.addConnections(value, initialNodeType, chosenFigures));
+    }
+    else {
+      let inputPorts = figure.getInputPorts();
+      chosenFigures.addAll(inputPorts);
+      inputPorts.each((i, value) => this.addConnections(value, initialNodeType, chosenFigures));
+    }
+  }
+
+  private addConnections(port: draw2d.Port, initialNodeType: string, chosenFigures: draw2d.util.ArrayList): void {
+    let connections = port.getConnections();
+    chosenFigures.addAll(connections);
+    connections.each((i, value) => this.addChain(value, initialNodeType, chosenFigures));
+  }
+
+  private addChain(connection: draw2d.Connection, initialNodeType: string, chosenFigures: draw2d.util.ArrayList): void {
+    let nextPort: draw2d.Port = connection.getSource();
+    if (initialNodeType == "sourcePort") {
+      nextPort = nextPort.name == "input0" ? nextPort : connection.getTarget();
+    } else {
+      nextPort = nextPort.name == "output0" ? nextPort : connection.getTarget();
+    }
+    chosenFigures.add(nextPort);
+    let nextNode = nextPort.getParent();
+    let nextFigures = this.getFiguresChain(nextNode, initialNodeType);
+    chosenFigures.addAll(nextFigures);
+  }
+
+  private setAttributesToFigures(figures: draw2d.util.ArrayList, attributeConfig: any): void {
+    figures.each((i, value) => this.applyFigureConfig(i, value, attributeConfig));
+  }
+
+  private attachApplicableElements(index: number, value: draw2d.Figure, result: draw2d.util.ArrayList): draw2d.util.ArrayList {
+    const shouldBeFiltered = value.cssClass != 'jailhouse' && value.cssClass != 'operatorNode';
+    if (shouldBeFiltered) {
+      result.add(value);
+
+      let subFigures = value.getChildren();
+      subFigures.each((i, value) => this.attachApplicableElements(i, value, result));
+      if (value.getConnections) {
+        let connections = value.getConnections();
+        connections.each((i, value) => this.attachApplicableElements(i, value, result));
+      };
+      if (value.getOutputPorts) {
+        let outputPorts = value.getOutputPorts();
+        outputPorts.each((i, value) => this.attachApplicableElements(i, value, result));
+      }
+      if (value.getInputPorts) {
+        let inputPorts = value.getInputPorts();
+        inputPorts.each((i, value) => this.attachApplicableElements(i, value, result));
+      }
+    }
+  }
+
+  private applyFigureConfig(index: number, value: draw2d.Figure, attributeConfig: any): void {
+    value.attr(attributeConfig);
+
+    let subFigures = value.getChildren();
+    subFigures.each((i, value) => this.applyFigureConfig(i, value, attributeConfig));
   drawDragAndDropMenu(canvas: draw2d.Canvas, width: number, height: number) {
     let dragAndDropMenu = new NodeContainer(160, 500, width, height, 0, 20, 20);
 

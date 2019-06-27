@@ -7,7 +7,14 @@ export class SourcePortNode extends draw2d.shape.node.Start {
   private readonly PORT_NAME: string = "output";
 
   constructor(port: Port) {
-    super({ width: port.width, height: port.height, cssClass: port.type.name, bgColor: SourcePortNode.INACTIVE_COLOR_WHITE, stroke: 0 });
+    super({
+      id: port.type.name + '_' + port.name,
+      cssClass: port.type.name,
+      width: port.width,
+      height: port.height,
+      bgColor: SourcePortNode.INACTIVE_COLOR_WHITE,
+      stroke: 0
+    });
     super.resetPorts().createPort(this.PORT_NAME);
   }
 
@@ -19,5 +26,9 @@ export class SourcePortNode extends draw2d.shape.node.Start {
   onMouseLeave() {
     super.setBackgroundColor(SourcePortNode.INACTIVE_COLOR_WHITE);
     super.setStroke(0);
+  }
+
+  getOutputPorts(): draw2d.util.ArrayList {
+    return super.getOutputPorts();
   }
 };
