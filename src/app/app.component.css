@@ -28,7 +28,3 @@
 :host ::ng-deep .operatorNode {
   stroke: darkblue;
 }
-:host ::ng-deep .jailhouse {
-  opacity: 0.5 !important;
-  /* TODO fill: url('../assets/grid_bg.png'); */
-}
