@@ -1,5 +1,6 @@
 import { OperatorNodeStrategy } from '../../contracts/OperatorNodeStrategy';
 import { OperatorNode } from '../decorators/OperatorNode';
+import draw2d from "draw2d";
 
 export class ActiveStrategy implements OperatorNodeStrategy {
   constructor(private readonly node: OperatorNode) {
@@ -18,7 +19,7 @@ export class ActiveStrategy implements OperatorNodeStrategy {
   }
 
   private removeNode() {
-    this.node.getCanvas().remove(this.node);
+    this.node.getCanvas().getCommandStack().execute(new draw2d.command.CommandDelete(this.node));
   }
 
   private alignToGrid(parent) {
