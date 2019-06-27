@@ -36,9 +36,12 @@ export class OperatorNode extends draw2d.shape.node.Between {
   getCanvas() { return super.getCanvas(); }
   getX() { return super.getX(); }
   getY() { return super.getY(); }
+  getWidth() { return super.getWidth(); }
+  getHeight() { return super.getHeight(); }
   setX(x : number) : void { super.setX(x); }
   setY(y : number) : void { super.setY(y); }
   getComposite() { return super.getComposite(); }
+  getBoundingBox() { return super.getBoundingBox(); }
   resetPorts() { super.resetPorts(); }
   defaultPorts() { 
     super.resetPorts();

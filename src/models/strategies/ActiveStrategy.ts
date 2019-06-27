@@ -13,7 +13,7 @@ export class ActiveStrategy implements OperatorNodeStrategy {
       if (this.node.getComposite() == null || !this.node.getComposite().hitTest(x, y)) 
         this.removeNode();
       else
-        this.alignToGrid();
+        this.alignToGrid(this.node.getComposite());
     }, 1);
   }
 
@@ -21,8 +21,22 @@ export class ActiveStrategy implements OperatorNodeStrategy {
     this.node.getCanvas().remove(this.node);
   }
 
-  private alignToGrid() {
-      this.node.setX(Math.round(this.node.getX() / 20) * 20);
-      this.node.setY(Math.round(this.node.getY() / 20) * 20);
+  private alignToGrid(parent) {
+    this.node.setX(Math.round(this.node.getX() / 20) * 20);
+    this.node.setY(Math.round(this.node.getY() / 20) * 20);
+
+    // Snap to inside the parent.
+    let nodeBox = this.node.getBoundingBox();
+    let parentBox = parent.getBoundingBox();
+    
+    if (nodeBox.getLeft() < parentBox.getLeft())
+      this.node.setX(parent.getX());
+    else if (nodeBox.getRight() > parentBox.getRight())
+      this.node.setX(parent.getX() + parent.getWidth() - this.node.getWidth());
+    
+    if (nodeBox.getTop() < parentBox.getTop())
+      this.node.setY(parent.getY());
+    else if (nodeBox.getBottom() > parentBox.getBottom())
+      this.node.setY(parent.getY() + parent.getHeight() - this.node.getHeight());
   }
 }

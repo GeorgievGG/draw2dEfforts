@@ -32,6 +32,7 @@ export class Draw2DService {
       bgColor: "#DDDDDD"
     });
     jailHouse.setDraggable(false);
+    jailHouse.setBoundingBox = function() {};
     canvas.add(jailHouse, 160, 20);
   };
 
