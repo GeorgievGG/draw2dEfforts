@@ -6,7 +6,14 @@ export class DestinationPortNode extends draw2d.shape.node.End {
   private static readonly INACTIVE_COLOR_WHITE: string = "#FFFFFF";
   private static readonly PORT_NAME: string = "output";
   constructor(port: Port) {
-    super({ width: port.width, height: port.height, cssClass: port.type.name, bgColor: DestinationPortNode.INACTIVE_COLOR_WHITE, stroke: 0 });
+    super({
+      id: port.type.name + '_' + port.name,
+      cssClass: port.type.name,
+      width: port.width,
+      height: port.height,
+      bgColor: DestinationPortNode.INACTIVE_COLOR_WHITE,
+      stroke: 0
+    });
   }
 
   onMouseEnter() {

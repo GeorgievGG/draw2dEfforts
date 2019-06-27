@@ -1,14 +1,21 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div id="container">
-  <div id="menu">
-    ghfghf
+﻿<!DOCTYPE html>
+<html lang="en" ng-app="">
+<head>
+  <meta charset="UTF-8">
+</head>
+<body>
+  <div id="container">
+    <div id="menu">
+      ghfghf
+    </div>
+    <div class="appConfigContainer">
+      <div class="searchContainer">
+        <input #sourcePortSearch type="text" placeholder="Search..." (keyup)="tryFilter()" class="searchBox sourceSearch">
+        <input #destPortSearch type="text" placeholder="Search..." (keyup)="tryFilter()" class="searchBox destSearch">
+      </div>
+      <div id="cnv">
+      </div>
+    </div>
   </div>
-  <div id="cnv">
-  </div>
-  <!--</div>-->
-  <div style="text-align:center">
-    <h1>
-      Welcome to {{ title }}!
-    </h1>
-  </div>
-</div>
+</body>
+</html>

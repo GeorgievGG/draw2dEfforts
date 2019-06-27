@@ -1,34 +1,66 @@
 #container {
   display: flex;
-  justify-content: space-around;
-  flex-direction: row wrap;
 }
-#cnv {
-  width: 85%;
-  height: 700px;
-}
+
 :host ::ng-deep #cnv > svg {
   position: inherit !important;
   width: 100%;
 }
+
 #menu {
   height: 1000px;
   width: 15%;
   background-color: aqua;
 }
+
 :host ::ng-deep .sourcePort {
   stroke: darkblue;
 }
+
 :host ::ng-deep .destinationPort {
   stroke: darkblue;
 }
+
 :host ::ng-deep .btwNode {
   stroke: darkblue;
 }
+
 :host ::ng-deep .operatorNode {
   stroke: darkblue;
 }
-:host ::ng-deep .jailhouse {
-  opacity: 0.5 !important;
-  /* TODO fill: url('../assets/grid_bg.png'); */
+
+.searchBox {
+  border: solid;
+  border-radius: 14px 14px;
+  border-width: 1px;
+  border-color: rgba(0,0,255,0.25);
+  padding: 5px 10px 5px 10px;
+  width: 100px;
+  display: inline-block;
+}
+
+.searchBox:focus {
+  outline: none;
+}
+
+.appConfigContainer {
+  width: 60%;
+}
+
+.searchContainer {
+  width: auto;
+}
+
+#cnv {
+  width: 100%;
+  height: 700px;
+}
+
+.sourceSearch {
+  margin-left: 0px;
+}
+
+.destSearch {
+  margin-right: 20px;
+  float: right;
 }
