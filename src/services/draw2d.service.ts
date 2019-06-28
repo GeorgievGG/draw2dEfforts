@@ -21,6 +21,14 @@ export class Draw2DService {
     const canvas = new draw2d.Canvas('cnv', 1200, minHeight);
     canvas.setScrollArea($(window));
 
+    // Removes focus from the focused element when the canvas is clicked.
+    // This fixes an issue where hotkeys would stop working after an input field
+    // (or something similar) is focused, as the SVG can not regain focus.
+    $(document).on("click", "#cnv", () => {
+      if (document.activeElement instanceof HTMLElement)
+        document.activeElement.blur();
+    });
+
     return canvas;
   };
 
