@@ -50,6 +50,7 @@ export class OperatorNode extends draw2d.shape.node.Between {
   }
   addCssClass(cssClass: string) { return super.addCssClass(cssClass); }
   removeCssClass(cssClass: string) { return super.removeCssClass(cssClass); }
+  setSelectable(selectable: boolean) { return super.setSelectable(selectable); }
 
   onMouseEnter() : void {
     super.setBackgroundColor(OperatorNode.ACTIVE_COLOR_LBLUE);

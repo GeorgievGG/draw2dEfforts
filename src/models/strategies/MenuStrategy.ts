@@ -6,6 +6,7 @@ export class MenuStrategy implements OperatorNodeStrategy {
   constructor(private readonly node: OperatorNode) {
     node.resetPorts();
     node.addCssClass('persists-filter');
+    node.setSelectable(false);
   }
 
   onDragStart(x, y, shiftKey, ctrlKey) {

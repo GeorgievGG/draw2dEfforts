@@ -6,6 +6,7 @@ export class ActiveStrategy implements OperatorNodeStrategy {
   constructor(private readonly node: OperatorNode) {
     node.defaultPorts();
     node.removeCssClass('persists-filter');
+    node.setSelectable(true);
   }
 
   onDragStart(x, y, shiftKey, ctrlKey) { }
