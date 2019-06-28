@@ -7,6 +7,7 @@ import { PortLabel } from '../models/decorators/PortLabel';
 import { SourcePortNode } from '../models/decorators/SourcePortNode';
 import { Port } from '../models/Port';
 import { NodeContainer } from 'src/models/NodeContainer';
+import { BoundingboxSelectionPolicy } from 'src/models/decorators/BoundingboxSelectionPolicy';
 
 @Injectable({
   providedIn: 'root'
@@ -32,8 +33,10 @@ export class Draw2DService {
       bgColor: "#DDDDDD"
     });
     jailHouse.setDraggable(false);
-    jailHouse.setBoundingBox = function () { };
-    canvas.add(jailHouse, 160, 20);
+    jailHouse.setBoundingBox = function () { }; // Disables resizing.
+    canvas.add(jailHouse, 160, 20)
+          // Enables drag selections starting from inside the jailhouse element.
+          .installEditPolicy(new BoundingboxSelectionPolicy([jailHouse])); 
   };
 
   drawPorts(canvas: draw2d.Canvas, ports: Port[]) {
